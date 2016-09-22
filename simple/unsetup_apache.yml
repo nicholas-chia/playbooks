@@ -1,0 +1,14 @@
+---
+-  hosts: testServer
+   remote_user: ec2-user
+   tasks:
+              
+      - name: Stopping httpd service
+        service: name=httpd state=stopped
+        become: yes
+   
+      - name: Remove httpd package
+        yum: name=httpd state=absent
+        become: yes
+
+        

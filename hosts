@@ -1,0 +1,2 @@
+[webservers]
+testserver ansible_ssh_host=52.221.223.74 ansible_ssh_port=22

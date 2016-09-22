@@ -1,0 +1,29 @@
+---
+- name: Configure webserver with nginx
+  hosts: webservers
+  become: true
+  tasks:
+    - name: install nginx
+      yum: name=nginx update_cache=yes
+    
+    - name: create nginx sites-available config file directory
+      file : path=/etc/nginx/sites-available/default state=directory recurse=yes
+      
+    - name: create nginx sites-enabled config file directory
+      file : path=/etc/nginx/sites-enabled/default state=directory recurse=yes
+    
+    - name: copy nginx config file
+      copy: src=files/nginx.conf dest=/etc/nginx/sites-available/default
+    
+    - name: enable configuration
+      file: >
+        src=/etc/nginx/sites-available/default
+        dest=/etc/nginx/sites-enabled/default
+        state=link
+        force=yes
+    
+    - name: copy index.html
+      template: src=templates/index.html.j2 dest=/usr/share/nginx/html/index.html mode=0644
+    
+    - name: restart nginx
+      service: name=nginx state=restarted
